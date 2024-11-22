@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Lattefy | Cargar Compra</title>
+    <meta property="og:title" content="Lattefy | Cargar Compra">
+    <meta property="og:image" content="assets/images/meta/meta_logo.png"/>
+    
+    <link rel="icon" href="assets/images/meta/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/images/meta/favicon.png">
+
+    <link rel="stylesheet" href="assets/style.css">
+
+    <!-- PHOSPHORICONS -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+</head>
+<body id="purchase" class="collapsed-sidebar">
+
+    <!-- Navigation Bar -->
+    <header class="navbar full-width">
+        <h2>Cargar Compra</h2>
+        <div class="nav-btns">
+            <a class="reload" href="purchase.html">
+                <i class="ph ph-arrow-clockwise"></i>
+            </a>
+            <a href="../fidelity/form.html" class="btn">Cargar Cliente</a>
+        </div>
+    </header>
+
+    <!-- Side Bar -->
+    <section class="sidebar active">
+
+        <div class="top">
+            <div class="logo">
+                <i class="ph ph-coffee"></i>
+                <h1>Lattefy</h1>
+            </div>
+            <div class="burger" id="sidebar-btn">
+                <span class="line-1"></span>
+                <span class="line-2"></span>
+                <span class="line-3"></span>
+            </div>
+        </div>
+
+        <ul class="menu">
+            <li>
+                <a href="index.html">
+                    <i class="ph ph-squares-four"></i>
+                    <span class="link">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="clients.html">
+                    <i class="ph ph-user-circle"></i>
+                    <span class="link">Clientes</span>
+                </a>
+            </li>
+            <li>
+                <a href="purchase.html">
+                    <i class="ph ph-shopping-cart"></i>
+                    <span class="link">Cargar compra</span>
+                </a>
+            </li>
+            <li>
+                <a href="stats.html">
+                    <i class="ph ph-presentation-chart"></i>
+                    <span class="link">Estadisticas</span>
+                </a>
+            </li>
+            <li>
+                <a href="campaigns.html">
+                    <i class="ph ph-bell"></i>
+                    <span class="link">Campañas</span>
+                </a>
+            </li>
+            <li>
+                <a href="download.html">
+                    <i class="ph ph-export"></i>
+                    <span class="link">Descargar Info.</span>
+                </a>
+            </li>
+        </ul>
+
+        <a id="logout-btn" class="log-out">
+            <i class="ph ph-sign-out"></i>
+            <span class="link">Cerrar sesion</span>
+        </a>
+
+    </section>
+
+    <!-- Main Content -->
+    <main class="main full-width">
+
+        <div class="container">
+            <h2 id="function-header"></h2>
+            <select id="function-selector">
+                <option value="add-points">Sumar Pandita</option>
+                <option value="claim-gift">Reclamar Regalo</option>
+            </select>
+            <div id="add-points-inputs" style="display: flex; flex-direction: column;">
+                <input type='text' id='phone-add' placeholder='Celular: 091234567' required>
+                <input type='number' id='amount-spent' placeholder='importe' step='100' required>
+                <a class="btn" id="purchase-btn">Sumar</a>
+            </div>
+            <div id="claim-gift-inputs" style="display: none; flex-direction: column;">
+                <input type='text' id='phone-gift' placeholder='Celular: 091234567' required>
+                <a class="btn" id="gift-btn">Reclamar</a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- auth -->
+    <script src="app/auth.js"></script>
+
+    <!-- emails -->
+     <script src="app/emails.js"></script>
+
+    <!-- purchase -->
+    <script src="app/purchase.js"></script>
+
+    <!-- dashboard -->
+    <script src="app/dashboard.js"></script>
+
+    <!-- Js File to send EmailJS email -->
+    <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script type="text/javascript">
+        emailjs.init('wL47zIkYAMk7PRKF_')
+    </script>
+
+    <!---------- General Js File ------------->
+    <script src="assets/script.js"></script>
+
+</body>
+</html>

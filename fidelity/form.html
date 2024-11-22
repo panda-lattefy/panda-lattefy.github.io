@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+  <title>Panda Bar | Fidelity Card</title>
+  <meta property="og:title" content="Panda Bar | Fidelity Card">
+  <meta property="og:image" content="assets/images/meta/meta-img.png"/>
+  
+  <link rel="icon" href="assets/images/meta/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/images/meta/favicon.png">
+
+  <link rel="stylesheet" href="assets/style.css">
+
+  <!-- PHOSPHORICONS -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+</head>
+<body id="form">
+
+  <main>
+
+    <div id="loader" style="display: none;"></div>
+
+    <!-- Navigation Bar -->
+    
+    <nav>
+      <a href="#">
+          <div class="logo">
+              <img src="assets/images/brand/panda-horizontal.png">
+          </div>
+      </a>
+      <div class="menu">
+        <a target="_blank" href="https://www.instagram.com/pandabar.uy/">@pandabar.uy</a> 
+    </div>
+      <a href="#" class="burger">
+          <span class="line-1"></span>
+          <span class="line-2"></span>
+          <span class="line-3"></span>
+      </a>
+    </nav>
+  
+    <section>
+
+      <div class="container">
+        <div class="header">
+          <h1>Bienvenido,</h1>
+      
+          <div class="link">
+            <p>
+              ¿Ya eres cliente?
+              <a href="./login.html">Iniciar sesión</a>
+            </p>
+          </div>
+      
+        </div>
+      
+        <div class="forms">
+          <form class="form">
+            <label for="name" id="name-label">Nombre completo</label>
+            <input type="text" id="name" placeholder="Juan Pérez" required>
+            <label for="phoneNumber" id="phoneNumber-label">Celular</label>
+            <input type="tel" id="phoneNumber" placeholder="09XXXXXXX" required>
+            <label for="email" id="email-label">Correo electrónico</label>
+            <input type="email" id="email" placeholder="hola@ejemplo.com" required>
+          </form>
+      
+        </div>
+      
+        <a class="btn" id="form-btn">Registrarse</a>
+      
+        <div class="link" id="terms">
+          <p>
+            Al registrarse, acepta los
+            <a href="https://lattefy.com.uy/terms" target="_blank" class="link">términos y condiciones</a>.
+          </p>
+        </div>
+      
+      </div>
+      
+
+    </section>
+
+    <a href="https://lattefy.com.uy">
+      <div class="lattefy">
+          <i class="ph ph-coffee"></i>
+          <h2>Lattefy</h2>
+      </div>
+    </a>
+
+  </main>
+
+  <!-- Js File to send EmailJS email -->
+  <script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <script type="text/javascript">
+      emailjs.init('wL47zIkYAMk7PRKF_')
+  </script>
+
+  <!-- Js File to connect with the server -->
+  <script src="assets/form.js"></script>
+
+  <!-- General Js File -->
+  <script src="assets/script.js"></script>
+
+</body>
+</html>
