@@ -406,7 +406,7 @@ section{
 }
 #card .container img {
     width: 50%;
-    margin: 0 auto 0 auto;
+    margin: 0 auto 10px auto;
 }
 #card .container .points-display {
     display: flex;
@@ -420,6 +420,9 @@ section{
     color: var(--dark);
     background-color: white;
     height: 50px;
+}
+#card .container h1 {
+    color: white;
 }
 #card .container .points-display h3 {
     font-size: 25px;
