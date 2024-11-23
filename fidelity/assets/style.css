@@ -377,8 +377,8 @@ section{
 /* DONE */
 
 #done .container {
-    width: 320px;
-    height: 300px;
+    width: 300px;
+    height: 250px;
     align-items: center;
     text-align: center;
 }
