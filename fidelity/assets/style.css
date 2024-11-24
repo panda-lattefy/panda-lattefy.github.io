@@ -365,7 +365,8 @@ section{
     align-items: center;
 }
 #login .container img {
-    width: 90px;
+    width: 110px;
+    margin: 5px 0 10px 0;
 }
 #login .container *input:nth-of-type(1) {
     margin-bottom: 10px;
