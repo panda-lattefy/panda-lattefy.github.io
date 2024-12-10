@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   // Done
-  if (document.getElementById('path')) {
+  if (document.getElementById('done')) {
 
     const phoneNumber = getPhoneNumberFromURL()
     
