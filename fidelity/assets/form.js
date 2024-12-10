@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           email: email,
           phoneNumber: phoneNumber,
           logCount: 0,
+          purchaseCount: 0,
           startDate: new Date(),
           subscription: true,
           lastRating: 0,
