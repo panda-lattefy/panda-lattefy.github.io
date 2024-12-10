@@ -2,6 +2,8 @@
 /* ---------------------------------------- UPLOAD PURCHASE ---------------------------------------- */
 /* ------------------------------------------------------------------------------------------------- */
 
+const { now } = require("mongoose")
+
 // Display Function
 const functionHeader = document.getElementById('function-header')
 const functionSelector = document.getElementById('function-selector')
@@ -70,7 +72,9 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
 
         const totalExpenditure = client.totalSpent + amountSpentNowNum
 
-        const nowPoints = Math.floor(amountSpentNow / 350)
+        const nowPoints = parseInt(amountSpentNow / 350)
+
+        console.log(nowPoints)
 
         let currentPoints
         let totalPoints
@@ -78,6 +82,8 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
         let averageExpenditure
         const totalPurchases = client.purchaseCount + 1
         averageExpenditure = totalExpenditure / totalPurchases
+
+        console.log(totalPurchases)
 
         const updates = {}
 
@@ -101,6 +107,8 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
             totalPoints = client.totalPoints + nowPoints
             
         }
+        console.log(currentPoints)
+        console.log(totalPoints)
 
         alert(`El cliente sumo panditas: ${currentPoints}/8`)
 
