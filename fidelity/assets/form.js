@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     loader.style.display = "none"
   })
 
-  // Form
+  // Form - Sign Up
   if (document.getElementById('form')) {
     document.getElementById('form-btn').addEventListener('click', async function (event) {
       event.preventDefault()
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           await createClient(clientData)
           await sendCardEmail(clientData)
           console.log('Client created successfully')
-          window.location.href = 'done.html'
+          window.location.href = `./done.html?phoneNumber=${phoneNumber}`
 
         } catch (error) {
           console.error('Error creating or updating client:', error)
@@ -301,6 +301,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     })
   
+  }
+
+  // Done
+  if (document.getElementById('path')) {
+    
+    const phoneNumber = getPhoneNumberFromURL()
+    
+    document.getElementById('done-btn').addEventListener('click', async function (event) {
+      event.preventDefault()
+      window.location.href = `./index.html?phoneNumber=${phoneNumber}`
+    })
+
   }
 
   // Card
