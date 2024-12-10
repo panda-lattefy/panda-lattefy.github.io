@@ -95,6 +95,11 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
             currentPoints = 8
             totalPoints = client.totalPoints + 8
 
+        } else if (currentPoints <= 8) {
+
+            currentPoints = client.currentPoints + nowPoints
+            totalPoints = client.totalPoints + nowPoints
+            
         }
 
         alert(`El cliente sumo panditas: ${currentPoints}/8`)
