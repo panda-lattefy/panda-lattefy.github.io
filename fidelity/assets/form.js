@@ -305,12 +305,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Done
   if (document.getElementById('path')) {
-    
+
     const phoneNumber = getPhoneNumberFromURL()
     
     document.getElementById('done-btn').addEventListener('click', async function (event) {
       event.preventDefault()
-      window.location.href = `./index.html?phoneNumber=${phoneNumber}`
+      
+      if (phoneNumber) {
+        window.location.href = `./index.html?phoneNumber=${phoneNumber}`
+      } else {
+        window.location.href = './login.html'
+      }
+
     })
 
   }
