@@ -55,61 +55,52 @@ function validatePhoneNumber (phoneNumber) {
   
 }
 
-// Upload Purchase
-async function uploadPurchase (phoneNumber, amountSpentNow) {
-
+async function uploadPurchase(phoneNumber, amountSpentNow) {
     validatePhoneNumber(phoneNumber)
+
     const amountSpentNowNum = parseFloat(amountSpentNow)
     if (isNaN(amountSpentNowNum)) {
-        alert('Importe invalido:', amountSpentNow)
+        alert('Importe inválido:', amountSpentNow)
         return
     }
 
     const client = await getClientByPhoneNumber(phoneNumber)
 
-    if (client && client.currentPoints < 8) {  
-
+    if (client && client.currentPoints < 8) {
         const totalExpenditure = client.totalSpent + amountSpentNowNum
 
-        const nowPoints = parseInt(amountSpentNow / 350)
+        const nowPoints = parseInt(amountSpentNowNum / 350) 
 
-        console.log(nowPoints)
+        let currentPoints = client.currentPoints 
+        let totalPoints = client.totalPoints || 0 
 
-        let currentPoints
-        let totalPoints
-
-        let averageExpenditure
         const totalPurchases = client.purchaseCount + 1
-        averageExpenditure = totalExpenditure / totalPurchases
-
-        console.log(totalPurchases)
+        const averageExpenditure = totalExpenditure / totalPurchases
 
         const updates = {}
 
-        if (currentPoints == 8) {
+        if (currentPoints + nowPoints == 8) {
 
             updates.giftAvailable = true
             sendFileEmail(client, 'gift')
-            currentPoints = client.currentPoints + nowPoints
-            totalPoints = client.totalPoints + nowPoints
+            currentPoints += nowPoints
+            totalPoints += nowPoints
 
-        } else if (currentPoints > 8) {
+        } else if (currentPoints + nowPoints > 8) {
 
             updates.giftAvailable = true
             sendFileEmail(client, 'gift')
             currentPoints = 8
-            totalPoints = client.totalPoints + 8
+            totalPoints += 8 - client.currentPoints 
 
-        } else if (currentPoints <= 8) {
+        } else {
 
-            currentPoints = client.currentPoints + nowPoints
-            totalPoints = client.totalPoints + nowPoints
-            
+            currentPoints += nowPoints
+            totalPoints += nowPoints
+
         }
-        console.log(currentPoints)
-        console.log(totalPoints)
 
-        alert(`El cliente sumo panditas: ${currentPoints}/8`)
+        alert(`El cliente sumó panditas: ${currentPoints}/8`)
 
         updates.currentPoints = currentPoints
         updates.totalPoints = totalPoints
@@ -118,15 +109,16 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
         updates.averageExpenditure = averageExpenditure.toFixed(2)
 
         await updateClient(phoneNumber, updates)
-        console.log('Se ha cargado la compra con exito!')
+        console.log('Se ha cargado la compra con éxito!')
 
     } else if (client && client.currentPoints == 8) {
-        alert(`${client.currentPoints}/8: El cliente debe reclamar su regalo`)
+        alert(`${client.currentPoints}/8: El cliente debe reclamar su regalo.`)
     } else {
         alert('No se ha encontrado el cliente.')
     }
-
+    
 }
+
 
 // Claim Gift
 async function claimGift (phoneNumber) {
