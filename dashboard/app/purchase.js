@@ -32,7 +32,6 @@ function checkSelector () {
 
 
 // Validate Inputs 
-
 function validatePhoneNumber (phoneNumber) {
 
     let phoneInput
@@ -44,10 +43,10 @@ function validatePhoneNumber (phoneNumber) {
         phoneInput = document.getElementById('phoneNumber')
     }
    
-    const phonePattern = /^0\d{8}$/ // starts with 0 and is 9 digits
+    const phonePattern = /^0\d{8}$/ // starts with 0 and is 8 digits
     if (!phonePattern.test(phoneNumber)) {
         phoneInput.style.borderColor = 'red'
-        alert('El celular debe comenzar con 0 y tener 9 dígitos')
+        alert('El celular debe comenzar con 0 y tener 8 dígitos')
         valid = false
     } else {
         phoneInput.style.borderColor = ''
@@ -67,7 +66,7 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
 
     const client = await getClientByPhoneNumber(phoneNumber)
 
-    if (client && client.currentPoints < 9) {  
+    if (client && client.currentPoints < 8) {  
 
         const totalExpenditure = client.totalSpent + amountSpentNowNum
 
@@ -84,14 +83,11 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
 
         const updates = {}
 
-        if (currentPoints == 4) {
-            updates.discountAvailable = true
-            sendFileEmail(client, 'discount')
-        } else if (currentPoints == 9) {
+        if (currentPoints == 8) {
             updates.giftAvailable = true
             sendFileEmail(client, 'gift')
         }
-        alert(`Se ha agregado una vita: ${currentPoints}/9`)
+        alert(`Se ha agregado una pandita: ${currentPoints}/8`)
 
         updates.currentPoints = currentPoints
         updates.totalPoints = totalPoints
@@ -101,8 +97,8 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
         await updateClient(phoneNumber, updates)
         console.log('Se ha cargado la compra con exito!')
 
-    } else if (client && client.currentPoints == 9) {
-        alert(`${client.currentPoints}/9: El cliente debe reclamar su burger gratis`)
+    } else if (client && client.currentPoints == 8) {
+        alert(`${client.currentPoints}/8: El cliente debe reclamar su burger gratis`)
     } else {
         alert('No se ha encontrado el cliente.')
     }
@@ -116,29 +112,22 @@ async function claimGift (phoneNumber) {
 
     const client = await getClientByPhoneNumber(phoneNumber)
 
-    console.log(client)
-
     if (client) {
 
         const updates = {}
 
-        if (client.currentPoints >= 4 && client.discountAvailable == true) {
-            updates.discountAvailable = false
-            alert(`${client.currentPoints}/9: El cliente reclamo un 15% de descuento`)
+        if (client.currentPoints == 8 && client.giftAvailable == true) {
 
-        } else if (client.currentPoints == 9 && client.giftAvailable == true) {
-            updates.currentPoints = client.currentPoints - 9
-            updates.discountAvailable = false
+            updates.currentPoints = client.currentPoints - 8
             updates.giftAvailable = false
-            updates.claimedBillies = client.claimedBillies + 1
-            alert(`${client.currentPoints}/9: El cliente reclamo una burger gratis`)
+            updates.giftsClaimed = client.giftsClaimed + 1
+            alert(`${client.currentPoints}/8: El cliente reclamo una burger gratis`)
 
         } else {
-            alert(`El cliente no tiene ningun regalo: ${client.currentPoints}/9`)
+            alert(`El cliente no tiene ningun regalo: ${client.currentPoints}/8`)
         }
 
         await updateClient(phoneNumber, updates)
-        console.log('Se ha reclamado el regalo con exito!')
 
     } else {
         alert('No se ha encontrado el cliente.')

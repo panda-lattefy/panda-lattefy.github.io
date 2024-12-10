@@ -8,7 +8,7 @@ function displayClientCount(clients) {
     clientAmount.textContent = clients.length 
 }
 
-// Display total billies
+// Display total points
 function displayTotalPoints(clients) {
     const allTotalPoints = clients.map(client => client.totalPoints)
 

@@ -36,18 +36,19 @@ function convertToPDF(clients) {
 // Convert clients data to CSV format
 function convertToCSV(clients) {
     const headers = [
-        'Nombre', 'Email', 'Celular', 'Fecha de Emision', 'Inicios de sesion',
-        'Descuento disponible', 'Regalo disponible', 'Vitas actuales',
-        'Vitas totales', 'Tarjetas completas', 'Consumo promedio', 'Consumo total'
+        'Nombre', 'Email', 'Celular', 
+        'Fecha de Emision', 'Inicios de sesion', 'Subscripcion',
+        'Regalo disponible', 'Vitas actuales', 'Vitas totales', 'Tarjetas completas', 
+        'Consumo promedio', 'Consumo total'
     ]
 
     const csvRows = [headers.join(',')]
 
     clients.forEach(client => {
     const row = [
-        client.name, client.email, client.phoneNumber, client.startDate, 
-        client.logCount, client.discountAvailable, client.giftAvailable,
-        client.currentPoints, client.totalPoints, client.claimedGifts, 
+        client.name, client.email, client.phoneNumber, 
+        client.startDate, client.logCount, client.subscription,
+        client.giftAvailable, client.currentPoints, client.totalPoints, client.claimedGifts, 
         client.averageExpenditure, client.totalSpent
     ].join(',')
 
