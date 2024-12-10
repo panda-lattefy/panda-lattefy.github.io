@@ -70,13 +70,16 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
 
         const totalExpenditure = client.totalSpent + amountSpentNowNum
 
-        let currentPoints = client.currentPoints + 1
-        const totalPoints = client.totalPoints + 1
+        const nowPoints = Math.floor(amountSpentNow / 350)
+
+        const currentPoints = client.currentPoints + nowPoints
+        const totalPoints = client.totalPoints + nowPoints
+        const totalPurchases = client.purchaseCount
 
         let averageExpenditure
 
-        if (totalPoints != 0) {
-            averageExpenditure = totalExpenditure / totalPoints
+        if (totalPurchases != 0) {
+            averageExpenditure = totalExpenditure / totalPurchases
         } else {
             averageExpenditure = 0
         }
@@ -84,13 +87,24 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
         const updates = {}
 
         if (currentPoints == 8) {
+
             updates.giftAvailable = true
             sendFileEmail(client, 'gift')
+            updates.currentPoints = currentPoints
+            updates.totalPoints = totalPoints
+
+        } else if (currentPoints > 8) {
+
+            updates.giftAvailable = true
+            sendFileEmail(client, 'gift')
+            updates.currentPoints = 8
+            updates.totalPoints = client.totalPoints + 8
+
         }
+
         alert(`Se ha agregado una pandita: ${currentPoints}/8`)
 
-        updates.currentPoints = currentPoints
-        updates.totalPoints = totalPoints
+        updates.purchaseCount = client.purchaseCount + 1
         updates.totalSpent = totalExpenditure
         updates.averageExpenditure = averageExpenditure.toFixed(2)
 
@@ -98,7 +112,7 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
         console.log('Se ha cargado la compra con exito!')
 
     } else if (client && client.currentPoints == 8) {
-        alert(`${client.currentPoints}/8: El cliente debe reclamar su burger gratis`)
+        alert(`${client.currentPoints}/8: El cliente debe reclamar su regalo`)
     } else {
         alert('No se ha encontrado el cliente.')
     }
@@ -121,7 +135,7 @@ async function claimGift (phoneNumber) {
             updates.currentPoints = client.currentPoints - 8
             updates.giftAvailable = false
             updates.giftsClaimed = client.giftsClaimed + 1
-            alert(`${client.currentPoints}/8: El cliente reclamo una burger gratis`)
+            alert(`${client.currentPoints}/8: El cliente reclamo su regalo`)
 
         } else {
             alert(`El cliente no tiene ningun regalo: ${client.currentPoints}/8`)
