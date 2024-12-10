@@ -2,7 +2,6 @@
 /* ---------------------------------------- UPLOAD PURCHASE ---------------------------------------- */
 /* ------------------------------------------------------------------------------------------------- */
 
-const { now } = require("mongoose")
 
 // Display Function
 const functionHeader = document.getElementById('function-header')
