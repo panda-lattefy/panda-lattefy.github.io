@@ -72,17 +72,12 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
 
         const nowPoints = Math.floor(amountSpentNow / 350)
 
-        const currentPoints = client.currentPoints + nowPoints
-        const totalPoints = client.totalPoints + nowPoints
-        const totalPurchases = client.purchaseCount
+        let currentPoints
+        let totalPoints
 
         let averageExpenditure
-
-        if (totalPurchases != 0) {
-            averageExpenditure = totalExpenditure / totalPurchases
-        } else {
-            averageExpenditure = 0
-        }
+        const totalPurchases = client.purchaseCount + 1
+        averageExpenditure = totalExpenditure / totalPurchases
 
         const updates = {}
 
@@ -90,21 +85,23 @@ async function uploadPurchase (phoneNumber, amountSpentNow) {
 
             updates.giftAvailable = true
             sendFileEmail(client, 'gift')
-            updates.currentPoints = currentPoints
-            updates.totalPoints = totalPoints
+            currentPoints = client.currentPoints + nowPoints
+            totalPoints = client.totalPoints + nowPoints
 
         } else if (currentPoints > 8) {
 
             updates.giftAvailable = true
             sendFileEmail(client, 'gift')
-            updates.currentPoints = 8
-            updates.totalPoints = client.totalPoints + 8
+            currentPoints = 8
+            totalPoints = client.totalPoints + 8
 
         }
 
-        alert(`Se ha agregado una pandita: ${currentPoints}/8`)
+        alert(`El cliente sumo panditas: ${currentPoints}/8`)
 
-        updates.purchaseCount = client.purchaseCount + 1
+        updates.currentPoints = currentPoints
+        updates.totalPoints = totalPoints
+        updates.purchaseCount = totalPurchases
         updates.totalSpent = totalExpenditure
         updates.averageExpenditure = averageExpenditure.toFixed(2)
 
