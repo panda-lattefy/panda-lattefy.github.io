@@ -1,7 +1,6 @@
 // Panda Bar - Fidelity Card | Form
 
 const apiUrl = 'https://backend-3kmq.onrender.com'
-// const apiUrl = 'http://localhost:3068'
 
 // Fetch client by phone number
 async function getClientByPhoneNumber(phoneNumber) {
@@ -98,8 +97,7 @@ async function sendCardEmail(client) {
 
       await emailjs.send(serviceID, templateID, templateParams)
 
-      console.log('Email sent successfully')
-  } 
+    } 
   catch (error) {
       console.error('Error sending email:', error)
   }
@@ -166,10 +164,10 @@ function validatePhoneNumber (phoneNumber) {
 
   const phoneInput = document.getElementById('phoneNumber')
   const phoneLabel = document.getElementById('phoneNumber-label')
-  const phonePattern = /^0\d{8}$/ // starts with 0 and is 9 digits
+  const phonePattern = /^09\d{7}$/ // starts with 09 and is 9 digits
   if (!phonePattern.test(phoneNumber)) {
       phoneInput.style.borderColor = 'red'
-      phoneLabel.textContent = 'Debe comenzar con 0 y tener 9 dígitos'
+      phoneLabel.textContent = 'Debe comenzar con 09 y tener 9 dígitos'
       valid = false
   } else {
       phoneInput.style.borderColor = ''
@@ -216,7 +214,6 @@ document.addEventListener('DOMContentLoaded', async function () {
           subscription: true,
           lastRating: 0,
           averageRating: 0,
-          discountAvailable: false,
           giftAvailable: false,
           currentPoints: 0,
           totalPoints: 0,
