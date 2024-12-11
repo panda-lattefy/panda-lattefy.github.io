@@ -308,9 +308,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const phoneNumber = getPhoneNumberFromURL()
     
-    document.getElementById('done-btn').addEventListener('click', async function (event) {
-      event.preventDefault()
-      
+    document.getElementById('done-btn').addEventListener('click', async () => {
       if (phoneNumber) {
         window.location.href = `./index.html?phoneNumber=${phoneNumber}`
       } else {
