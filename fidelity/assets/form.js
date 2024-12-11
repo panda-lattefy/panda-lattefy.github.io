@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       const client = await getClientByPhoneNumber(phoneNumber)
       console.log(client)
       document.getElementById("client-name").innerHTML = client.name
-      document.getElementById("current-points").innerHTML = `${client.currentPoints} / 9`
+      document.getElementById("current-points").innerHTML = `${client.currentPoints} / 8`
     } else {
       window.location.href = './path.html'
       console.log('phoneNumber not found in the URL')
