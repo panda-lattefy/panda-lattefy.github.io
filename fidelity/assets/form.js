@@ -1,6 +1,7 @@
 // Panda Bar - Fidelity Card | Form
 
-const apiUrl = 'https://backend-3kmq.onrender.com'
+//const apiUrl = 'https://backend-3kmq.onrender.com'
+const apiUrl = 'http://localhost:3068'
 
 // Fetch client by phone number
 async function getClientByPhoneNumber(phoneNumber) {
@@ -39,6 +40,44 @@ async function AuthenticatePhoneNumber(phoneNumber) {
     return null
   }
 }
+
+// Validate token and fetch client data
+async function getClientByToken() {
+  const accessToken = localStorage.getItem('accessToken')
+  if (!accessToken) {
+    console.log('No token found in localStorage.')
+    return null
+  }
+
+  try {
+    // Validate the token
+    const response = await fetch(`${apiUrl}/auth/verify-token`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+
+    if (!response.ok) {
+      console.warn('Invalid token.')
+      localStorage.removeItem('accessToken') // Clean up
+      return null
+    }
+
+    const { phoneNumber } = await response.json()
+    if (!phoneNumber) {
+      console.warn('No phone number returned from token validation.')
+      return null
+    }
+
+    console.log('Token valid. Fetching client via phone number...')
+    return await getClientByPhoneNumber(phoneNumber)
+  } catch (error) {
+    console.error('Error validating token or fetching client:', error)
+    return null
+  }
+}
+
 
 
 // Create client
@@ -103,6 +142,8 @@ async function sendCardEmail(client) {
   }
   
 }
+
+
 
 // URL Functions
 
@@ -262,6 +303,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   // Login
   if (document.getElementById('login')) {
 
+    await loginAuth()
+
     document.getElementById('login-btn').addEventListener('click', async function (event) {
       event.preventDefault()
 
@@ -322,20 +365,39 @@ document.addEventListener('DOMContentLoaded', async function () {
   // Card
   if (document.getElementById('card')) {
     loader.style.display = "block"
+    
     const phoneNumber = getPhoneNumberFromURL()
+    const token = localStorage.getItem('accessToken')
 
+    let client = null
     if (phoneNumber) {
       clearURL()
-      const client = await getClientByPhoneNumber(phoneNumber)
-      console.log(client)
-      document.getElementById("client-name").innerHTML = client.name
-      document.getElementById("current-points").innerHTML = `${client.currentPoints} / 8`
+      client = await getClientByPhoneNumber(phoneNumber)
+    } else if (token) {
+      client = await getClientByToken()
     } else {
       window.location.href = './path.html'
       console.log('phoneNumber not found in the URL')
     }
-    loader.style.display = "none"
+    console.log(client)
+
+    // Display Card
+    if (client) {
+      document.getElementById("client-name").innerHTML = client.name
+      document.getElementById("current-points").innerHTML = `${client.currentPoints} / 8`
+      loader.style.display = "none"
+    } else {
+      window.location.href = './path.html'
+    }
+
+    // Log out
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      localStorage.removeItem('accessToken')
+      window.location.href = './login.html'
+    })
+
   }
+
 })
 
 
