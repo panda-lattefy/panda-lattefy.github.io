@@ -1,7 +1,6 @@
 // Panda Bar - Fidelity Card | Form
 
-//const apiUrl = 'https://backend-3kmq.onrender.com'
-const apiUrl = 'http://localhost:3068'
+const apiUrl = 'https://backend-3kmq.onrender.com'
 
 // Fetch client by phone number
 async function getClientByPhoneNumber(phoneNumber) {
