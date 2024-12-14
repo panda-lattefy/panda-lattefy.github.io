@@ -3,7 +3,7 @@
 // const authUrl = 'http://localhost:3089'
 const authUrl = 'https://backend-v2-2.onrender.com'
 
-async function auth() {
+async function auth(businessName) {
   const email = getEmailFromURL()
   const password = getPasswordFromURL()
 
@@ -13,17 +13,17 @@ async function auth() {
   if (email && password) {
     await authLogin(email, password) 
   } else if (refreshToken || accessToken){
-    await validateTokens(accessToken, refreshToken) 
+    await validateTokens(accessToken, refreshToken, businessName) 
   } else {
     window.location.href = 'https://lattefy.com.uy/auth'
   }
 }
 
 // Token Validation
-async function validateTokens(accessToken, refreshToken) {
+async function validateTokens(accessToken, refreshToken, businessName) {
 
   // Validate access token against the server
-  const tokenValid = await validateAccessToken(accessToken)
+  const tokenValid = await validateAccessToken(accessToken, businessName)
   if (!tokenValid) {
     console.log('Access token expired or invalid, refreshing...')
     await refreshAccessToken(refreshToken)
@@ -33,7 +33,7 @@ async function validateTokens(accessToken, refreshToken) {
 
 }
 
-async function validateAccessToken(accessToken) {
+async function validateAccessToken(accessToken, businessName) {
 
   try {
       const response = await fetch(`${authUrl}/auth/verify-token`, {
@@ -51,7 +51,7 @@ async function validateAccessToken(accessToken) {
 
       // Parse JSON response
       const data = await response.json()
-      if (data.name === 'Panda Bar') {
+      if (data.name === businessName) {
         return true
       }
 

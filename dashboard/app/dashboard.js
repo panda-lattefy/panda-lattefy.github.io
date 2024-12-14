@@ -82,8 +82,7 @@ async function updateClient(phoneNumber, updates) {
 document.addEventListener('DOMContentLoaded', async function () {
 
   // auth
-  await auth()
-
+  await auth("Panda Bar")
   const clients = await getAll('clients')
 
   // log-out
