@@ -36,17 +36,23 @@ async function validateTokens(accessToken, refreshToken) {
 async function validateAccessToken(accessToken) {
 
   try {
-      const response = await fetch(`${authUrl}/users`, {
+      const response = await fetch(`${authUrl}/auth/verify-token`, {
           method: 'GET',
           headers: {
               'Authorization': `Bearer ${accessToken}`
           }
       })
 
-      if (response.ok) {
-          return true
+      if (!response.ok) {
+          return false
       } else if (response.status === 403 || response.status === 401) {
           return false
+      }
+
+      // Parse JSON response
+      const data = await response.json()
+      if (data.name === 'Panda Bar') {
+        return true
       }
 
   } catch (error) {
