@@ -2,6 +2,9 @@
 /* ------------------------------------------- CAMPAIGNS ------------------------------------------- */
 /* ------------------------------------------------------------------------------------------------- */
 
+// Global variable to store original clients data
+let originalClients = []
+
 // Function to send emails using EmailJS
 async function sendCampaignEmail(clients, title, content, imageUrl) {
     try {
@@ -64,25 +67,81 @@ function displayAudienceSize(clients) {
     }
 }
 
+// Function to filter clients based on criteria
+function filterClients(clients, variable, condition, value) {
+    return clients.filter(client => {
+        const clientValue = client[variable]?.toString().toLowerCase() || ''
+        const filterValue = value.toLowerCase()
+
+        if (condition === 'contains') {
+            return clientValue.includes(filterValue)
+        } else if (condition === 'not-contains') {
+            return !clientValue.includes(filterValue)
+        }
+        return false
+    })
+}
+
+// Function to update audience size dynamically
+function updateAudienceSize(clients) {
+    displayAudienceSize(clients)
+}
+
 // DOM Content Load
 document.addEventListener('DOMContentLoaded', async function () {
-    const clients = await getAll('clients')
+    // Fetch all clients once and store them
+    originalClients = await getAll('clients')
+    let filteredClients = [...originalClients] // Copy of clients for filtering
 
-    // Display audience size
-    displayAudienceSize(clients)
+    // Display initial audience size
+    displayAudienceSize(originalClients)
 
+    // File upload logic
     const fileInput = document.getElementById('image-upload')
     const fileName = document.getElementById('file-name')
 
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0]
-        if (file) {
-            fileName.textContent = file.name
-        } else {
-            fileName.textContent = ''
-        }
+        fileName.textContent = file ? file.name : 'Subir Archivo'
     })
 
+    // Event listener for "Apply" button (Filter Logic)
+    document.getElementById('apply-btn').addEventListener('click', (e) => {
+        e.preventDefault()
+
+        // Retrieve filter values
+        const variable = document.getElementById('filter-variable').value
+        const condition = document.getElementById('filter-condition').value
+        const value = document.getElementById('filter-value').value.trim()
+
+        // Validate filter input
+        if (!value) {
+            alert('Por favor ingrese un valor para filtrar.')
+            return
+        }
+
+        // Apply filter and update audience
+        filteredClients = filterClients(originalClients, variable, condition, value)
+        updateAudienceSize(filteredClients)
+    })
+
+    // Event listener for "Reset" button (Reset Filters)
+    document.getElementById('reset-btn').addEventListener('click', (e) => {
+        e.preventDefault()
+
+        // Reset filtered clients to the original list
+        filteredClients = [...originalClients]
+
+        // Clear filter input fields
+        document.getElementById('filter-variable').selectedIndex = 0
+        document.getElementById('filter-condition').selectedIndex = 0
+        document.getElementById('filter-value').value = ''
+
+        // Update audience size to the original list
+        updateAudienceSize(originalClients)
+    })
+
+    // Event listener for "Send Campaign" button
     document.getElementById('campaign-btn').addEventListener('click', async (e) => {
         e.preventDefault()
 
@@ -100,13 +159,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         let imageUrl = ''
-
         if (imageFile) {
             imageUrl = await uploadImageToCloudinary(imageFile)
         }
 
         try {
-            await sendCampaignEmail(clients, title, content, imageUrl)
+            // Send campaign emails to the filtered clients
+            await sendCampaignEmail(filteredClients, title, content, imageUrl)
         } catch (error) {
             console.error('Error sending campaign emails:', error)
             alert('Error al enviar la campaña. Por favor, inténtalo de nuevo.')
