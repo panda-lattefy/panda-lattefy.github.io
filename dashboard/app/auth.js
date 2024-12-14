@@ -33,6 +33,7 @@ async function validateTokens(accessToken, refreshToken, businessName) {
 
 }
 
+// Validate access token
 async function validateAccessToken(accessToken, businessName) {
 
   try {
@@ -62,18 +63,17 @@ async function validateAccessToken(accessToken, businessName) {
 
 }
 
-// Refresh the access token using the refresh token
+// Refresh access token
 async function refreshAccessToken(refreshToken, businessName) {
-
   console.log("Refreshing token...")
 
   try {
     const response = await fetch(`${authUrl}/auth/token`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: refreshToken })
+      body: JSON.stringify({ token: refreshToken }),
     })
 
     if (!response.ok) {
@@ -84,23 +84,22 @@ async function refreshAccessToken(refreshToken, businessName) {
 
     const data = await response.json()
     const isValid = await validateAccessToken(data.accessToken, businessName)
-    console.log(isValid)
     if (!isValid) {
+      console.warn('Refreshed access token is invalid. Redirecting to auth page...')
       window.location.href = 'https://lattefy.com.uy/auth'
+      return
     }
 
-    console.log(data.accessToken)
-
     localStorage.setItem('accessToken', data.accessToken)
+    console.log('Access token refreshed successfully.')
     window.location.reload()
-  
-  } catch (error) {
-    console.log('Error refreshing access token: ' + error.message)
-    window.location.href = 'https://lattefy.com.uy/auth'
-    throw error 
-  }
 
+  } catch (error) {
+    console.error('Error refreshing access token:', error.message)
+    window.location.href = 'https://lattefy.com.uy/auth'
+  }
 }
+
 
 // URL utility functions
 function getEmailFromURL() {
