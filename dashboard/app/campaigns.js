@@ -1,18 +1,16 @@
-/* ------------------------------------------------------------------------------------------------- */
-/* ------------------------------------------- CAMPAIGNS ------------------------------------------- */
-/* ------------------------------------------------------------------------------------------------- */
-
-// Variable global para almacenar la lista original de clientes
 let originalClients = []
+let filteredClients = []
 
-// Función para enviar emails usando EmailJS
 async function sendCampaignEmail(clients, title, content, imageUrl) {
+    console.log('Enviando campaña a:', clients.length, 'clientes')
     try {
         for (const client of clients) {
             if (!client.email) {
-                console.error(`Missing email for client: ${client.name}`)
+                console.error(`Falta email para el cliente: ${client.name}`)
                 continue
             }
+
+            console.log('Enviando email a:', client.email)
 
             const templateParams = {
                 to_email: client.email,
@@ -27,20 +25,20 @@ async function sendCampaignEmail(clients, title, content, imageUrl) {
 
             await emailjs.send(serviceID, templateID, templateParams)
         }
-        alert('Campaña enviada con éxito!')
+        alert('Campaña enviada con éxito')
     } catch (error) {
-        console.error('Error sending campaign emails:', error)
-        alert('Error al enviar la campaña.')
+        console.error('Error al enviar emails:', error)
+        alert('Error al enviar la campaña')
     }
 }
 
-// Función para subir imágenes a Cloudinary
 async function uploadImageToCloudinary(imageFile) {
     const formData = new FormData()
     formData.append('file', imageFile)
     formData.append('upload_preset', 'my_unsigned_preset')
 
     try {
+        console.log('Subiendo imagen a Cloudinary...')
         const response = await fetch('https://api.cloudinary.com/v1_1/dc4g5ehpo/image/upload', {
             method: 'POST',
             body: formData
@@ -48,101 +46,80 @@ async function uploadImageToCloudinary(imageFile) {
         const data = await response.json()
 
         if (response.ok) {
+            console.log('Imagen subida con éxito:', data.secure_url)
             return data.secure_url
         } else {
             throw new Error(data.error.message)
         }
     } catch (error) {
-        console.error('Error uploading the image:', error)
-        alert('Error al cargar el archivo.')
+        console.error('Error al subir la imagen:', error)
+        alert('Error al cargar el archivo')
     }
 }
 
-// Función para actualizar el tamaño de la audiencia
 function displayAudienceSize(clients) {
-    const audienceSize = clients.length
+    console.log('Tamaño de la audiencia:', clients.length)
     const audienceElement = document.getElementById('audience-size')
-    if (audienceElement) {
-        audienceElement.textContent = `Tamaño de la audiencia: ${audienceSize}`
-    }
+    audienceElement.textContent = `Tamaño de la audiencia: ${clients.length}`
 }
 
-// Función para filtrar clientes
 function filterClients(clients, variable, condition, value) {
+    console.log(`Filtrando por ${variable} con condición ${condition} y valor "${value}"`)
     return clients.filter(client => {
         const clientValue = client[variable]?.toString().toLowerCase() || ''
         const filterValue = value.toLowerCase()
 
-        if (condition === 'contains') {
-            return clientValue.includes(filterValue)
-        } else if (condition === 'not-contains') {
-            return !clientValue.includes(filterValue)
-        }
+        if (condition === 'contains') return clientValue.includes(filterValue)
+        if (condition === 'not-contains') return !clientValue.includes(filterValue)
         return false
     })
 }
 
-// Carga inicial de clientes y configuración de eventos
 document.addEventListener('DOMContentLoaded', async function () {
-    // Obtener la lista de clientes original
     originalClients = await getAll('clients')
-    let filteredClients = [...originalClients]
-
-    // Mostrar tamaño de la audiencia inicial
+    filteredClients = [...originalClients]
     displayAudienceSize(originalClients)
 
-    // Elementos del DOM
     const fileInput = document.getElementById('image-upload')
     const fileName = document.getElementById('file-name')
 
-    // Mostrar nombre del archivo al subir una imagen
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0]
         fileName.textContent = file ? file.name : 'Subir Archivo'
+        console.log('Archivo seleccionado:', file ? file.name : 'Ninguno')
     })
 
-    // Botón "Aplicar" para filtrar clientes
-    document.getElementById('apply-btn').addEventListener('click', (e) => {
-        e.preventDefault()
-
+    document.getElementById('apply-btn').addEventListener('click', () => {
         const variable = document.getElementById('filter-variable').value
         const condition = document.getElementById('filter-condition').value
         const value = document.getElementById('filter-value').value.trim()
 
         if (!variable || !value) {
-            alert('Por favor ingrese valores válidos para filtrar.')
+            alert('Por favor ingrese valores válidos para filtrar')
             return
         }
 
         filteredClients = filterClients(originalClients, variable, condition, value)
         displayAudienceSize(filteredClients)
+        console.log('Clientes después de filtrar:', filteredClients)
     })
 
-    // Botón "Reset" para limpiar filtros
-    document.getElementById('reset-btn').addEventListener('click', (e) => {
-        e.preventDefault()
-
+    document.getElementById('reset-btn').addEventListener('click', () => {
         filteredClients = [...originalClients]
         document.getElementById('filter-variable').selectedIndex = 0
         document.getElementById('filter-condition').selectedIndex = 0
         document.getElementById('filter-value').value = ''
         displayAudienceSize(originalClients)
+        console.log('Filtros reiniciados')
     })
 
-    // Botón "Enviar Campaña"
-    document.getElementById('campaign-btn').addEventListener('click', async (e) => {
-        e.preventDefault()
-
-        const loader = document.getElementById('loader')
-        loader.style.display = "block"
-
+    document.getElementById('campaign-btn').addEventListener('click', async () => {
         const title = document.getElementById('title').value
         const content = document.getElementById('content').value
         const imageFile = document.getElementById('image-upload').files[0]
 
         if (!title || !content) {
-            alert('Por favor complete el título y el contenido.')
-            loader.style.display = "none"
+            alert('Por favor complete el título y el contenido')
             return
         }
 
@@ -151,12 +128,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             imageUrl = await uploadImageToCloudinary(imageFile)
         }
 
-        try {
-            await sendCampaignEmail(filteredClients, title, content, imageUrl)
-        } catch (error) {
-            console.error('Error sending campaign emails:', error)
-        }
+        console.log('Iniciando envío de campaña con:')
+        console.log('Título:', title)
+        console.log('Contenido:', content)
+        console.log('Imagen URL:', imageUrl)
+        console.log('Clientes a enviar:', filteredClients.length)
 
-        loader.style.display = "none"
+        document.getElementById('campaign-btn').disabled = true
+
+        await sendCampaignEmail(filteredClients, title, content, imageUrl)
+
+        document.getElementById('campaign-btn').disabled = false
+        alert('Campaña enviada con éxito!')
     })
 })
