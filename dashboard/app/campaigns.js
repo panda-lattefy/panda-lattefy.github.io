@@ -2,10 +2,10 @@
 /* ------------------------------------------- CAMPAIGNS ------------------------------------------- */
 /* ------------------------------------------------------------------------------------------------- */
 
-// Global variable to store original clients data
+// Variable global para almacenar la lista original de clientes
 let originalClients = []
 
-// Function to send emails using EmailJS
+// Función para enviar emails usando EmailJS
 async function sendCampaignEmail(clients, title, content, imageUrl) {
     try {
         for (const client of clients) {
@@ -34,7 +34,7 @@ async function sendCampaignEmail(clients, title, content, imageUrl) {
     }
 }
 
-// Function to upload images to Cloudinary
+// Función para subir imágenes a Cloudinary
 async function uploadImageToCloudinary(imageFile) {
     const formData = new FormData()
     formData.append('file', imageFile)
@@ -58,7 +58,7 @@ async function uploadImageToCloudinary(imageFile) {
     }
 }
 
-// Function to display audience size
+// Función para actualizar el tamaño de la audiencia
 function displayAudienceSize(clients) {
     const audienceSize = clients.length
     const audienceElement = document.getElementById('audience-size')
@@ -67,7 +67,7 @@ function displayAudienceSize(clients) {
     }
 }
 
-// Function to filter clients based on criteria
+// Función para filtrar clientes
 function filterClients(clients, variable, condition, value) {
     return clients.filter(client => {
         const clientValue = client[variable]?.toString().toLowerCase() || ''
@@ -82,66 +82,54 @@ function filterClients(clients, variable, condition, value) {
     })
 }
 
-// Function to update audience size dynamically
-function updateAudienceSize(clients) {
-    displayAudienceSize(clients)
-}
-
-// DOM Content Load
+// Carga inicial de clientes y configuración de eventos
 document.addEventListener('DOMContentLoaded', async function () {
-    // Fetch all clients once and store them
+    // Obtener la lista de clientes original
     originalClients = await getAll('clients')
-    let filteredClients = [...originalClients] // Copy of clients for filtering
+    let filteredClients = [...originalClients]
 
-    // Display initial audience size
+    // Mostrar tamaño de la audiencia inicial
     displayAudienceSize(originalClients)
 
-    // File upload logic
+    // Elementos del DOM
     const fileInput = document.getElementById('image-upload')
     const fileName = document.getElementById('file-name')
 
+    // Mostrar nombre del archivo al subir una imagen
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0]
         fileName.textContent = file ? file.name : 'Subir Archivo'
     })
 
-    // Event listener for "Apply" button (Filter Logic)
+    // Botón "Aplicar" para filtrar clientes
     document.getElementById('apply-btn').addEventListener('click', (e) => {
         e.preventDefault()
 
-        // Retrieve filter values
         const variable = document.getElementById('filter-variable').value
         const condition = document.getElementById('filter-condition').value
         const value = document.getElementById('filter-value').value.trim()
 
-        // Validate filter input
-        if (!value) {
-            alert('Por favor ingrese un valor para filtrar.')
+        if (!variable || !value) {
+            alert('Por favor ingrese valores válidos para filtrar.')
             return
         }
 
-        // Apply filter and update audience
         filteredClients = filterClients(originalClients, variable, condition, value)
-        updateAudienceSize(filteredClients)
+        displayAudienceSize(filteredClients)
     })
 
-    // Event listener for "Reset" button (Reset Filters)
+    // Botón "Reset" para limpiar filtros
     document.getElementById('reset-btn').addEventListener('click', (e) => {
         e.preventDefault()
 
-        // Reset filtered clients to the original list
         filteredClients = [...originalClients]
-
-        // Clear filter input fields
         document.getElementById('filter-variable').selectedIndex = 0
         document.getElementById('filter-condition').selectedIndex = 0
         document.getElementById('filter-value').value = ''
-
-        // Update audience size to the original list
-        updateAudienceSize(originalClients)
+        displayAudienceSize(originalClients)
     })
 
-    // Event listener for "Send Campaign" button
+    // Botón "Enviar Campaña"
     document.getElementById('campaign-btn').addEventListener('click', async (e) => {
         e.preventDefault()
 
@@ -164,11 +152,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         try {
-            // Send campaign emails to the filtered clients
             await sendCampaignEmail(filteredClients, title, content, imageUrl)
         } catch (error) {
             console.error('Error sending campaign emails:', error)
-            alert('Error al enviar la campaña. Por favor, inténtalo de nuevo.')
         }
 
         loader.style.display = "none"
