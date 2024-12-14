@@ -74,6 +74,7 @@ async function refreshAccessToken(refreshToken) {
     })
 
     if (!response.ok) {
+      window.location.href = 'https://lattefy.com.uy/auth'
       throw new Error('Failed to refresh access token')
     }
 
