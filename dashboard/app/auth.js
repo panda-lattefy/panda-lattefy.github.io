@@ -26,7 +26,7 @@ async function validateTokens(accessToken, refreshToken, businessName) {
   const tokenValid = await validateAccessToken(accessToken, businessName)
   if (!tokenValid) {
     console.log('Access token expired or invalid, refreshing...')
-    await refreshAccessToken(refreshToken)
+    await refreshAccessToken(refreshToken, businessName)
   } else {
     console.log('Access token is valid')
   }
@@ -63,7 +63,10 @@ async function validateAccessToken(accessToken, businessName) {
 }
 
 // Refresh the access token using the refresh token
-async function refreshAccessToken(refreshToken) {
+async function refreshAccessToken(refreshToken, businessName) {
+
+  console.log("Refreshing token...")
+
   try {
     const response = await fetch(`${authUrl}/auth/token`, {
       method: 'POST',
@@ -74,14 +77,19 @@ async function refreshAccessToken(refreshToken) {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to refresh access token')
+      console.warn('Failed to refresh access token. Redirecting to auth page...')
+      window.location.href = 'https://lattefy.com.uy/auth'
+      return
     }
 
     const data = await response.json()
-
-    if (!validateAccessToken(data.accessToken)) {
+    const isValid = await validateAccessToken(data.accessToken, businessName)
+    console.log(isValid)
+    if (!isValid) {
       window.location.href = 'https://lattefy.com.uy/auth'
     }
+
+    console.log(data.accessToken)
 
     localStorage.setItem('accessToken', data.accessToken)
     window.location.reload()
