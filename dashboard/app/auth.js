@@ -74,11 +74,15 @@ async function refreshAccessToken(refreshToken) {
     })
 
     if (!response.ok) {
-      window.location.href = 'https://lattefy.com.uy/auth'
       throw new Error('Failed to refresh access token')
     }
 
     const data = await response.json()
+
+    if (!validateAccessToken(data.accessToken)) {
+      window.location.href = 'https://lattefy.com.uy/auth'
+    }
+
     localStorage.setItem('accessToken', data.accessToken)
     window.location.reload()
   
