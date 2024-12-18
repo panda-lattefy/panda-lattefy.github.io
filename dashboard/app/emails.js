@@ -1,11 +1,11 @@
 // Function to send emails using EmailJS
 
 const images = {
-   gift: 'https://res.cloudinary.com/dc4g5ehpo/image/upload/v1732316741/gift_vh4axy.png'
+   gift: 'https://res.cloudinary.com/dc4g5ehpo/image/upload/v1734561145/gift_mgbqkf.png'
 }
 
 const titles = {
-    gift: '¡Reclama tu burger/milanesa 100% gratis!'
+    gift: '¡Reclama tu burger o milanesa 100% gratis!'
 }
 
 let imageUrl
