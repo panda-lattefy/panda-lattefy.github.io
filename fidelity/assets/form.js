@@ -124,14 +124,18 @@ async function sendCardEmail(client) {
   try {
   
       const templateParams = {
-          to_email: client.email,
-          name: client.name,
-          title: title,
-          image_url: imageUrl || ''
+        from_name: 'Panda Bar',
+        reply_to: 'panda.lattefy@gmail.com', 
+
+        to_email: client.email,
+        name: client.name,
+        
+        title: title,
+        image_url: imageUrl || ''
       }
 
       const serviceID = 'service_llm5u9s'
-      const templateID = 'template_cp5w5vg'
+      const templateID = 'template_ds5krec'
 
       await emailjs.send(serviceID, templateID, templateParams)
 

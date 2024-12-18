@@ -44,19 +44,3 @@ async function loginAuth() {
 
 }
 
-async function cardAuth() {
-
-  const phoneNumber = getPhoneNumberFromURL()
-  const accessToken = localStorage.getItem('accessToken')
-
-  let client
-  if (phoneNumber) {
-    client = await getClientByPhoneNumber(phoneNumber)
-  } else if (accessToken){
-    client = await getClientByToken() 
-  } else {
-    window.location.href = './path.html'
-  }
-
-  return client
-}
