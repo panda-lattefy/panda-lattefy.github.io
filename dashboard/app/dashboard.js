@@ -1,5 +1,5 @@
 
-// Panda Bar - Fidelity Card | Dashboard
+// Vita - Fidelity Card | Dashboard
 
 
 /* --------------------------------------------------------------------------------------------------*/

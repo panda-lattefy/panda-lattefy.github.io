@@ -135,7 +135,7 @@ async function claimGift (phoneNumber) {
 
             updates.currentPoints = client.currentPoints - 8
             updates.giftAvailable = false
-            updates.giftsClaimed = client.giftsClaimed + 1
+            updates.claimedGifts = client.claimedGifts + 1
             alert(`${client.currentPoints}/8: El cliente reclamo su regalo`)
 
         } else {

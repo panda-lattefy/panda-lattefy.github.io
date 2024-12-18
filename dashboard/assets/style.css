@@ -1224,7 +1224,10 @@ body#download .sidebar .menu li:nth-child(6) a {
     #campaigns .main .card textarea {
         height: 30%;
     }
-    #campaigns .main .card .filter {
+    #campaigns .filter {
+        display: none;
+    }
+    #campaigns .card:nth-child(3) {
         display: none;
     }
 
