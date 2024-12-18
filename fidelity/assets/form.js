@@ -118,7 +118,7 @@ async function updateClient(phoneNumber, updates) {
 // Send email function
 async function sendCardEmail(client) {
 
-  const imageUrl = 'https://res.cloudinary.com/dc4g5ehpo/image/upload/v1732316740/card_xspn9b.png'
+  const imageUrl = 'https://res.cloudinary.com/dc4g5ehpo/image/upload/v1734561144/card_yekuud.png'
   const title = 'Ya podes empezar a sumar panditas!'
 
   try {
