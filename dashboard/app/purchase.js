@@ -69,7 +69,7 @@ async function uploadPurchase(phoneNumber, amountSpentNow) {
     if (client && client.currentPoints < 8) {
         const totalExpenditure = client.totalSpent + amountSpentNowNum
 
-        const nowPoints = parseInt(amountSpentNowNum / 350) 
+        const nowPoints = parseInt(amountSpentNowNum / 500) 
 
         let currentPoints = client.currentPoints 
         let totalPoints = client.totalPoints || 0 
