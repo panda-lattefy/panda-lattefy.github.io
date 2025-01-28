@@ -27,38 +27,41 @@ async function filterClients(clients, variable, condition, value) {
 // Function to send emails using EmailJS
 async function sendCampaignEmail(clients, title, content, imageUrl) {
 
-    try {
-        for (const client of clients) {
-            if (!client.email) {
-                console.error(`Missing email for client: ${client.name}`)
-                continue
-            }
-    
-            const templateParams = {
-                from_name: 'Panda Bar',
-                reply_to: 'panda.lattefy@gmail.com', 
+    const successCount = 0
+    const errorCount = 0
 
-                to_email: client.email,
-                name: client.name,
+    const serviceID = 'service_ug8aoje'
+    const templateID = 'template_d029ld1'
 
-                title: title,
-                content: content,
-                image_url: imageUrl || ''
-            }
+    for (const client of clients) {
 
-            const serviceID = 'service_ug8aoje';
-            const templateID = 'template_d029ld1';
-    
-            await emailjs.send(serviceID, templateID, templateParams)
-    
+        if (!client.email) {
+            console.error(`Missing email for client: ${client.name}`)
+            errorCount++
+            continue
         }
-        alert('Campaña enviada con exito!')
-    } 
-    catch (error) {
-        console.error('Error sending campaign emails:', error)
-        alert('Error al enviar la campaña.')
-    }
+
+        const templateParams = {
+            from_name: 'Panda Bar',
+            reply_to: 'panda.lattefy@gmail.com', 
     
+            to_email: client.email,
+            name: client.name,
+    
+            title: title,
+            content: content,
+            image_url: imageUrl || ''
+        }
+
+        try {
+            await emailjs.send(serviceID, templateID, templateParams)
+            successCount++
+        } catch (error) {
+            console.error(`Error sending email to ${client.email}:`, error)
+            errorCount++
+        }
+        alert(`Campaña enviada con exito! ${successCount} correos enviados, ${errorCount} errores.`)
+    }
 }
     
 // Function to upload images to Cloudinary
