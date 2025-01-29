@@ -27,8 +27,8 @@ async function filterClients(clients, variable, condition, value) {
 // Function to send emails using EmailJS
 async function sendCampaignEmail(clients, title, content, imageUrl) {
 
-    const successCount = 0
-    const errorCount = 0
+    let successCount = 0
+    let errorCount = 0
 
     const serviceID = 'service_ug8aoje'
     const templateID = 'template_d029ld1'
@@ -60,8 +60,9 @@ async function sendCampaignEmail(clients, title, content, imageUrl) {
             console.error(`Error sending email to ${client.email}:`, error)
             errorCount++
         }
-        alert(`Campaña enviada con exito! ${successCount} correos enviados, ${errorCount} errores.`)
+        
     }
+    alert(`Campaña enviada con exito! ${successCount} correos enviados, ${errorCount} errores.`)
 }
     
 // Function to upload images to Cloudinary
