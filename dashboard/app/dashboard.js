@@ -1,5 +1,4 @@
-
-// Vita - Fidelity Card | Dashboard
+// Panda Bar - Fidelity Card | Dashboard
 
 
 /* --------------------------------------------------------------------------------------------------*/
@@ -169,83 +168,83 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   }
 
-// Campaigns
-if (document.getElementById('campaigns')) {
+  // Campaigns
+  if(document.getElementById('campaigns')) {
 
-  // Display file name once uploaded
-  const fileInput = document.getElementById('image-upload');
-  const fileName = document.getElementById('file-name');
+    const fileInput = document.getElementById('image-upload');
+    const fileName = document.getElementById('file-name');
 
-  fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0]
-      if (file) {
-          fileName.textContent = file.name
-      } else {
-          fileName.textContent = '' 
-      }
-  })
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0]
+        if (file) {
+            fileName.textContent = file.name
+        } else {
+            fileName.textContent = '' 
+        }
+    })
 
-  let audience
+    let audience = clients
 
-  // Apply clients filter
-  document.getElementById('apply-btn').addEventListener('click', async () => {
-      const variable = document.getElementById('filter-variable').value
-      const condition = document.getElementById('filter-condition').value
-      const value = document.getElementById('filter-value').value.trim()
+    // Apply clients filter
+    document.getElementById('apply-btn').addEventListener('click', async () => {
+        const variable = document.getElementById('filter-variable').value
+        const condition = document.getElementById('filter-condition').value
+        const value = document.getElementById('filter-value').value.trim()
 
-      if (!variable || !value) {
-          alert('Por favor ingrese valores válidos para filtrar')
-          return
-      }
+        if (!variable || !value) {
+            alert('Por favor ingrese valores válidos para filtrar')
+            return
+        }
 
-      // Wait for the filtered clients
-      audience = await filterClients(clients, variable, condition, value)
-      displayAudienceSize(audience)
-      console.log('Audience:', audience)
-  })
+        // Wait for the filtered clients
+        audience = await filterClients(clients, variable, condition, value)
+        displayAudienceSize(audience)
+        console.log('Audience:', audience)
+    })
 
-  // Reset clients filter
-  document.getElementById('reset-btn').addEventListener('click', () => {
-      audience = clients
-      document.getElementById('filter-variable').selectedIndex = 0
-      document.getElementById('filter-condition').selectedIndex = 0
-      document.getElementById('filter-value').value = ''
-      displayAudienceSize(clients)
-      console.log('filters reset')
-  })
+    // Reset clients filter
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        audience = clients
+        document.getElementById('filter-variable').selectedIndex = 0
+        document.getElementById('filter-condition').selectedIndex = 0
+        document.getElementById('filter-value').value = ''
+        displayAudienceSize(clients)
+        console.log('filters reset')
+    })
 
-  // Send campaign email to audience
-  document.getElementById('campaign-btn').addEventListener('click', async (e) => {
+    document.getElementById('campaign-btn').addEventListener('click', async (e) => {
       e.preventDefault()
 
       loader.style.display = "block"
-
+    
       const title = document.getElementById('title').value
       const content = document.getElementById('content').value
       const imageFile = document.getElementById('image-upload').files[0]
-
+    
       if (!title || !content) {
-          alert('Please fill out the title and content.')
-          loader.style.display = "none"
-          return
+        alert('Please fill out the title and content.')
+        loader.style.display = "none"
+        return
       }
-
+    
       let imageUrl = ''
+    
       if (imageFile) {
-          imageUrl = await uploadImageToCloudinary(imageFile)
+        imageUrl = await uploadImageToCloudinary(imageFile)
       }
-
+    
       try {
-          await sendCampaignEmail(audience, title, content, imageUrl)
+        await sendCampaignEmail(audience, title, content, imageUrl)
       } catch (error) {
-          console.error('Error sending campaign emails:', error)
-          alert('Error sending campaign emails. Please try again.')
+        console.error('Error sending campaign emails:', error)
+        alert('Error sending campaign emails. Please try again.')
       }
 
       loader.style.display = "none"
-  })    
 
-}
+    })    
+
+  }
 
 
   // Download
